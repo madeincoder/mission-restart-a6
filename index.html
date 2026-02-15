@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SwiftCart</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body>
+    <header class="bg-white">
+      <!-- Navigation -->
+      <nav class="mx-auto max-w-6xl px-4">
+        <div class="flex h-16 items-center justify-between">
+          <!-- Logo -->
+          <a href="index.html" class="text-xl font-semibold text-brand"
+            >SwiftCart</a
+          >
+
+          <!-- Menu for desktop -->
+          <div class="hidden md:flex items-center gap-8 text-sm">
+            <a class="font-medium text-brand" href="index.html">Home</a>
+            <a class="text-slate-600 hover:text-brand" href="products.html"
+              >Products</a
+            >
+            <a class="text-slate-600 hover:text-brand" href="/">About</a>
+            <a class="text-slate-600 hover:text-brand" href="/">Contact</a>
+          </div>
+
+          <!-- Cart and Mobile menu -->
+          <div class="flex items-center gap-3">
+            <button
+              id="cartBtn"
+              class="relative rounded-lg p-2 hover:bg-slate-100"
+              aria-label="Open cart"
+            >
+              <!-- cart icon -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-slate-800"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.8"
+                  d="M2.25 3h1.5l1.2 10.2a2.25 2.25 0 002.24 2h9.86a2.25 2.25 0 002.2-1.77l1.3-5.43H6.1"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.8"
+                  d="M9 21a.75.75 0 100-1.5A.75.75 0 009 21zm10.5 0a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                />
+              </svg>
+              <span
+                id="cartCount"
+                class="absolute -right-1 -top-1 hidden min-w-[18px] rounded-full bg-brand px-1.5 text-center text-[11px] font-semibold text-white"
+              >
+                0
+              </span>
+            </button>
+
+            <button
+              id="mobileMenuBtn"
+              class="md:hidden rounded-lg p-2 hover:bg-slate-100"
+              aria-label="Open menu"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-slate-800"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.8"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile menu panel -->
+        <div id="mobileMenu" class="hidden md:hidden pb-4">
+          <div class="flex flex-col gap-2 text-sm">
+            <a
+              class="rounded-lg px-3 py-2 font-medium text-brand bg-brand/10"
+              href="index.html"
+              >Home</a
+            >
+            <a
+              class="rounded-lg px-3 py-2 text-slate-700 hover:bg-slate-100"
+              href="products.html"
+              >Products</a
+            >
+            <a
+              class="rounded-lg px-3 py-2 text-slate-700 hover:bg-slate-100"
+              href="/"
+              >About</a
+            >
+            <a
+              class="rounded-lg px-3 py-2 text-slate-700 hover:bg-slate-100"
+              href="/"
+              >Contact</a
+            >
+          </div>
+        </div>
+      </nav>
+    </header>
+  </body>
+</html>
