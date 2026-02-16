@@ -3,8 +3,6 @@ function initMobileMenu() {
   const mobileMenuBtn = document.getElementById("mobileMenuBtn");
   const mobileMenu = document.getElementById("mobileMenu");
   if (!mobileMenuBtn || !mobileMenu) return;
-
-  // Mobile menu open/close on button click
   mobileMenuBtn.addEventListener("click", (e) => {
     e.stopPropagation();
     mobileMenu.classList.toggle("hidden");
@@ -15,9 +13,10 @@ initMobileMenu();
 // Api URL's
 
 const ALL_PRODUCTS_URL = "https://fakestoreapi.com/products";
+const CATEGORIES_URL = "https://fakestoreapi.com/products/categories";
 
 /* =================================
-   Trending (Top 3 rated products)
+   Trending - Top 3 rated products
    ================================ */
 function spinnerHTML() {
   return `
@@ -67,7 +66,7 @@ function productCardHTML(product) {
         <div class="p-5 flex flex-col !justify-between h-full">
             <div>
                 <div class="flex items-center justify-between gap-3">
-                    <span class="inline-flex rounded-full bg-[var(--brand-color)]/20 px-3 py-1 text-[12px] font-medium text-[var(--brand-color)]">
+                    <span class="inline-flex rounded-full bg-[var(--brand-color)]/10 px-3 py-1 text-[12px] font-medium text-[var(--brand-color)]">
                     ${product.category
                       .split(" ")
                       .map(
@@ -75,11 +74,11 @@ function productCardHTML(product) {
                       )
                       .join(" ")}
                     </span>
-                    <div class="text-base font-medium text-slate-700">★ ${Number(product.rating.rate).toFixed(1)}(${product.rating.count})
+                    <div class="text-sm font-medium text-slate-700"><span class="text-yellow-600">★</span>${Number(product.rating.rate).toFixed(1)}(${product.rating.count})
                     </div>
                 </div>
 
-                <h4 class="mt-3 text-lg font-semibold">${product.title}</h4>
+                <h4 class="mt-3 text-lg font-semibold line-clamp-1">${product.title}</h4>
 
                 <div class="mt-4">
                     <span class="text-xl font-bold">$${product.price}</span>
@@ -106,3 +105,115 @@ function bindCardButtons(card) {
     a.addEventListener("click", (e) => e.preventDefault());
   });
 }
+
+/* =========================
+        Products Page
+   ========================= */
+
+function categoryButtonsHTML(categories) {
+  return categories.map((category) => categoryButtonHTML(category)).join("");
+}
+
+function categoryButtonHTML(category) {
+  return `
+    <button onclick="selectCategory('${category.replace(/'/g, "\\'")}', this)" class="category-btn rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700 hover:bg-slate-200 cursor-pointer">
+      ${category
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")}
+    </button>
+  `;
+}
+function filterByCategory(category) {
+  const productsGrid = document.getElementById("productsGrid");
+  if (!productsGrid) return;
+
+  //   productsGrid.innerHTML = spinnerHTML();
+
+  fetch(ALL_PRODUCTS_URL)
+    .then((res) => res.json())
+    .then((products) => {
+      let html = "";
+      products.forEach((product) => {
+        if (product.category === category) {
+          html += productCardHTML(product);
+        }
+      });
+      productsGrid.innerHTML = html;
+      bindCardButtons(productsGrid);
+    })
+    .catch(() => {
+      productsGrid.innerHTML = `
+        <div class="col-span-full rounded-lg bg-red-50 p-4 text-sm text-red-700">
+          Failed to load products.
+        </div>
+      `;
+    });
+}
+
+function selectCategory(category, button) {
+  document
+    .querySelectorAll(".category-btn")
+    .forEach((btn) => btn.classList.remove("active"));
+  button.classList.add("active");
+
+  if (category === "all") {
+    allProducts();
+  } else {
+    filterByCategory(category);
+  }
+}
+
+function allCategoriesButtonHTML() {
+  return `
+    <button onclick="selectCategory('all', this)" class="category-btn rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700 hover:bg-slate-200 cursor-pointer active">All</button>
+  `;
+}
+
+function initCategoryBar() {
+  const categoryBar = document.getElementById("categoryBar");
+  if (!categoryBar) return;
+
+  fetch(CATEGORIES_URL)
+    .then((res) => res.json())
+    .then((categories) => {
+      categoryBar.innerHTML = allCategoriesButtonHTML();
+      categories.forEach((c) => {
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = categoryButtonHTML(c);
+        categoryBar.appendChild(tempDiv);
+      });
+    })
+    .catch(() => {
+      categoryBar.innerHTML = `
+        <div class="col-span-full rounded-lg bg-red-50 p-4 text-sm text-red-700">
+          Failed to load categories.
+        </div>
+      `;
+    });
+}
+initCategoryBar();
+
+function allProducts() {
+  const productsGrid = document.getElementById("productsGrid");
+  if (!productsGrid) return;
+
+  productsGrid.innerHTML = spinnerHTML();
+
+  fetch(ALL_PRODUCTS_URL)
+    .then((res) => res.json())
+    .then((products) => {
+      let html = "";
+      products.forEach((p) => (html += productCardHTML(p)));
+      productsGrid.innerHTML = html;
+      bindCardButtons(productsGrid);
+    })
+    .catch(() => {
+      productsGrid.innerHTML = `
+        <div class="col-span-full rounded-lg bg-red-50 p-4 text-sm text-red-700">
+          Failed to load all products.
+        </div>
+      `;
+    });
+}
+allProducts();

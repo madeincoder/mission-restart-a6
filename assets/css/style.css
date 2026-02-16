@@ -15,3 +15,9 @@
     overflow: hidden;
   }
 }
+@layer components {
+  .category-btn.active {
+    background-color: var(--brand-color);
+    color: white;
+  }
+}
